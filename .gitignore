@@ -1,0 +1,12 @@
+obj
+*.dll
+*.exe
+*.cfg
+log.txt
+*.zip
+*.xnb
+*.a
+*.layout
+*.depend
+*_build_log.html
+*.tbin

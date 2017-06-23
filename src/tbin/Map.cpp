@@ -173,7 +173,7 @@ namespace tbin
     void writeAnimatedTile( std::ostream& out, const Tile& tile )
     {
         write( out, tile.animatedData.frameInterval );
-        write( out, tile.animatedData.frames.size() );
+        write< sf::Int32 >( out, tile.animatedData.frames.size() );
 
         std::string currTilesheet;
         for ( const Tile& tile : tile.animatedData.frames )
@@ -188,6 +188,8 @@ namespace tbin
             write< sf::Uint8 >( out, 'S' );
             writeStaticTile( out, tile );
         }
+
+        writeProperties( out, tile.props );
     }
 
     Layer readLayer( std::istream& in )

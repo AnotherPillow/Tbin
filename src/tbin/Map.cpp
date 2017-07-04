@@ -76,7 +76,7 @@ namespace tbin
         }
 
 
-        return std::move( ret );
+        return ret;
     }
 
     void writeProperties( std::ostream& out, const Properties& props )
@@ -108,7 +108,7 @@ namespace tbin
         ret.margin = read< sf::Vector2i >( in );
         ret.spacing = read< sf::Vector2i >( in );
         ret.props = readProperties( in );
-        return std::move( ret );
+        return ret;
     }
 
     void writeTilesheet( std::ostream& out, const TileSheet& ts )
@@ -130,7 +130,7 @@ namespace tbin
         ret.staticData.tileIndex = read< sf::Int32 >( in );
         ret.staticData.blendMode = read< sf::Uint8 >( in );
         ret.props = readProperties( in );
-        return std::move( ret );
+        return ret;
     }
 
     void writeStaticTile( std::ostream& out, const Tile& tile )
@@ -167,7 +167,7 @@ namespace tbin
 
         ret.props = readProperties( in );
 
-        return std::move( ret );
+        return ret;
     }
 
     void writeAnimatedTile( std::ostream& out, const Tile& tile )
@@ -234,7 +234,7 @@ namespace tbin
             }
         }
 
-        return std::move( ret );
+        return ret;
     }
 
     void writeLayer( std::ostream& out, const Layer& layer )

@@ -1,10 +1,10 @@
 #ifndef TBIN_TILESHEET_HPP
 #define TBIN_TILESHEET_HPP
 
-#include <SFML/System/Vector2.hpp>
 #include <string>
 
 #include "tbin/PropertyValue.hpp"
+#include "tbin/Vector2.hpp"
 
 namespace tbin
 {
@@ -14,10 +14,10 @@ namespace tbin
             std::string id;
             std::string desc;
             std::string image;
-            sf::Vector2i sheetSize;
-            sf::Vector2i tileSize;
-            sf::Vector2i margin;
-            sf::Vector2i spacing;
+            Vector2 sheetSize;
+            Vector2 tileSize;
+            Vector2 margin;
+            Vector2 spacing;
             Properties props;
     };
 }

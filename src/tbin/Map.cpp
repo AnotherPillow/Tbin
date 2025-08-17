@@ -15,11 +15,11 @@ namespace tbin
     }
 
     template<>
-    sf::Vector2i read< sf::Vector2i >( std::istream& in )
+    Vector2 read< Vector2 >( std::istream& in )
     {
         sf::Int32 x = read< sf::Int32 >( in );
         sf::Int32 y = read< sf::Int32 >( in );
-        return sf::Vector2i( x, y );
+        return Vector2( x, y );
     }
 
     template<>
@@ -38,7 +38,7 @@ namespace tbin
     }
 
     template<>
-    void write< sf::Vector2i >( std::ostream& out, const sf::Vector2i& vec )
+    void write< Vector2 >( std::ostream& out, const Vector2& vec )
     {
         write< sf::Int32 >( out, vec.x );
         write< sf::Int32 >( out, vec.y );
@@ -103,10 +103,10 @@ namespace tbin
         ret.id = read< std::string >( in );
         ret.desc = read< std::string >( in );
         ret.image = read< std::string >( in );
-        ret.sheetSize = read< sf::Vector2i >( in );
-        ret.tileSize = read< sf::Vector2i >( in );
-        ret.margin = read< sf::Vector2i >( in );
-        ret.spacing = read< sf::Vector2i >( in );
+        ret.sheetSize = read< Vector2 >( in );
+        ret.tileSize = read< Vector2 >( in );
+        ret.margin = read< Vector2 >( in );
+        ret.spacing = read< Vector2 >( in );
         ret.props = readProperties( in );
         return ret;
     }
@@ -198,8 +198,8 @@ namespace tbin
         ret.id = read< std::string >( in );
         ret.visible = read< sf::Uint8 >( in ) > 0;
         ret.desc = read< std::string >( in );
-        ret.layerSize = read< sf::Vector2i >( in );
-        ret.tileSize = read< sf::Vector2i >( in );
+        ret.layerSize = read< Vector2 >( in );
+        ret.tileSize = read< Vector2 >( in );
         ret.props = readProperties( in );
 
         Tile nullTile; nullTile.staticData.tileIndex = -1;

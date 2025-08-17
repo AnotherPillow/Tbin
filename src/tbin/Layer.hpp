@@ -1,12 +1,13 @@
 #ifndef TBIN_LAYER_HPP
 #define TBIN_LAYER_HPP
 
-#include <SFML/System/Vector2.hpp>
+//#include <SFML/System/Vector2.hpp>
 #include <string>
 #include <vector>
 
 #include "tbin/PropertyValue.hpp"
 #include "tbin/Tile.hpp"
+#include "tbin/Vector2.hpp"
 
 namespace tbin
 {
@@ -16,8 +17,8 @@ namespace tbin
             std::string id;
             bool visible;
             std::string desc;
-            sf::Vector2i layerSize;
-            sf::Vector2i tileSize;
+            Vector2 layerSize;
+            Vector2 tileSize;
             Properties props;
             std::vector< Tile > tiles;
     };

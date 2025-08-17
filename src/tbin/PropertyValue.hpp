@@ -2,7 +2,7 @@
 #define TBIN_PROPERTYVALUE_HPP
 
 #include <map>
-#include <SFML/Config.hpp>
+//#include <SFML/Config.hpp>
 #include <string>
 
 namespace tbin

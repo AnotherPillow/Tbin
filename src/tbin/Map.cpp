@@ -2,7 +2,7 @@
 
 #include <fstream>
 #include <stdexcept>
-#include <util/Logger.hpp>
+//#include <util/Logger.hpp>
 
 namespace tbin
 {
@@ -69,7 +69,7 @@ namespace tbin
                 case PropertyValue::Integer: value.data.i  = read< sf::Int32   >( in );     break;
                 case PropertyValue::Float:   value.data.f  = read< float       >( in );     break;
                 case PropertyValue::String:  value.dataStr = read< std::string >( in );     break;
-                default: throw std::invalid_argument( util::format( "Bad property type: $", static_cast< int >( value.type ) ) );
+                default: throw std::invalid_argument("Bad property type");
             }
 
             ret[ key ] = value;
@@ -92,7 +92,7 @@ namespace tbin
                 case PropertyValue::Integer: write( out, prop.second.data.i ); break;
                 case PropertyValue::Float: write( out, prop.second.data.f ); break;
                 case PropertyValue::String: write( out, prop.second.dataStr ); break;
-                default: throw std::invalid_argument( util::format( "Bad property type: $", prop.second.type ) );
+                default: throw std::invalid_argument("Bad property type");
             }
         }
     }
@@ -161,7 +161,7 @@ namespace tbin
                     ++i;
                     break;
                 default:
-                    throw std::invalid_argument( util::format( "Bad layer tile data: $", c ) );
+                    throw std::invalid_argument("Bad layer tile data");
             }
         }
 
@@ -229,7 +229,7 @@ namespace tbin
                         currTilesheet = read< std::string >( in );
                         break;
                     default:
-                        throw std::invalid_argument( util::format( "Bad layer tile data: $ @ $", static_cast< int >( c ), in.tellg() - 1 ) );
+                        throw std::invalid_argument("Bad layer tile data");
                 }
             }
         }
@@ -301,11 +301,11 @@ namespace tbin
         std::ifstream file( path, std::ifstream::binary );
         if ( !file )
         {
-            util::log( "[ERROR] $: Failed to open file.\n", path );
+            printf( "[ERROR] %s: Failed to open file.\n", path.c_str() );
             return false;
         }
 
-        util::log( "[INFO] Reading $...\n", path );
+        printf( "[INFO] Reading %s...\n", path.c_str() );
         return loadFromStream( file );
     }
 
@@ -319,7 +319,7 @@ namespace tbin
             in.read( &magic[ 0 ], 6 );
             if ( magic != MAGIC_1_0 )
             {
-                util::log( "[ERROR] File is not a tbin file.\n" );
+                printf( "[ERROR] File is not a tbin file.\n" );
                 return false;
             }
 
@@ -351,7 +351,7 @@ namespace tbin
         }
         catch ( std::exception& e )
         {
-            util::log( "[ERROR] Exception reading: $\n", e.what() );
+            printf( "[ERROR] Exception reading: %s\n", e.what() );
             return false;
         }
     }
@@ -361,11 +361,11 @@ namespace tbin
         std::ofstream file( path, std::ofstream::binary | std::ofstream::trunc );
         if ( !file )
         {
-            util::log( "[ERROR] $: Failed to open file.\n", path );
+            printf( "[ERROR] %s: Failed to open file.\n", path.c_str() );
             return false;
         }
 
-        util::log( "[INFO] Writing to $...\n", path );
+        printf( "[INFO] Writing to %s...\n", path.c_str() );
         return saveToStream( file );
     }
 
@@ -392,7 +392,7 @@ namespace tbin
         }
         catch ( std::exception& e )
         {
-            util::log( "[ERROR] Exception writing: $\n", e.what() );
+            printf( "[ERROR] Exception writing: %s\n", e.what() );
             return false;
         }
     }

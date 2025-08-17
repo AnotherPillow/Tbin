@@ -10,3 +10,5 @@ log.txt
 *.depend
 *_build_log.html
 *.tbin
+
+libsc0-tbin-test

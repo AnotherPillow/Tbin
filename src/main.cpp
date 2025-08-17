@@ -1,16 +1,16 @@
 #include "tbin/Map.hpp"
 
 #include <iostream>
-#include <util/Logger.hpp>
 
-int main()
+int main(int argv, char** argc)
 {
-    util::Logger::setName( "Main log", "log.txt" );
+    if (3 > argv) {
+        printf("please run with [executable] input.tbin output.tbin");
+        return 1;
+    }
 
     tbin::Map map;
-    //if ( !map.loadFromFile( "G:\\StardewValley\\StardewValley-decompiled\\Content-Unpacked\\Maps\\Backwoods.tbin" ) )
-    //if ( !map.loadFromFile( "G:\\StardewValley\\StardewValley-decompiled\\Content-Unpacked\\Maps\\BathHouse_Entry.tbin" ) )
-    if ( !map.loadFromFile( "G:\\StardewValley\\Backwoods.tbin" ) )
+    if ( !map.loadFromFile(argc[1]) )
     {
         return 1;
     }
@@ -18,7 +18,7 @@ int main()
     std::map< std::string, int > tss;
     for ( auto ts : map.tilesheets )
     {
-        util::log("$ $ $,$ $,$\n", ts.id, ts.image, ts.sheetSize.x, ts.sheetSize.y, ts.tileSize.x, ts.tileSize.y );
+        printf("%s %s %d,%d %d,%d\n", ts.id.c_str(), ts.image.c_str(), ts.sheetSize.x, ts.sheetSize.y, ts.tileSize.x, ts.tileSize.y );
         tss.insert( std::make_pair( ts.id, ts.sheetSize.x * ts.sheetSize.y ) );
     }
 
@@ -35,10 +35,10 @@ int main()
         }
     }
 
-    if ( !map.saveToFile( "G:\\StardewValley\\Backwoods2.tbin" ) )
+    if ( !map.saveToFile( argc[2] ) )
         return 2;
 
-    if ( !map.loadFromFile( "G:\\StardewValley\\Backwoods2.tbin" ) )
+    if ( !map.loadFromFile( argc[2] ) )
         return 3;
 
     return 0;

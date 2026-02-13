@@ -4,6 +4,7 @@
 #include <map>
 //#include <SFML/Config.hpp>
 #include <string>
+#include <cstdint>
 
 namespace tbin
 {
@@ -22,7 +23,7 @@ namespace tbin
             union
             {
                 bool b;
-                sf::Int32 i;
+                std::int32_t i;
                 float f;
             } data;
             std::string dataStr;

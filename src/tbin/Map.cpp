@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <stdexcept>
+#include <cstdint>
 //#include <util/Logger.hpp>
 
 namespace tbin
@@ -17,15 +18,15 @@ namespace tbin
     template<>
     Vector2 read< Vector2 >( std::istream& in )
     {
-        int32 x = read< sf::Int32 >( in );
-        int32 y = read< sf::Int32 >( in );
+        std::int32_t x = read< std::int32_t >( in );
+        std::int32_t y = read< std::int32_t >( in );
         return Vector2( x, y );
     }
 
     template<>
     std::string read< std::string >( std::istream& in )
     {
-        auto len = read< int32 >( in );
+        auto len = read< std::int32_t >( in );
         std::string str( len, 0 );
         in.read( &str[ 0 ], len );
         return str;
@@ -40,14 +41,14 @@ namespace tbin
     template<>
     void write< Vector2 >( std::ostream& out, const Vector2& vec )
     {
-        write< int32 >( out, vec.x );
-        write< int32 >( out, vec.y );
+        write< std::int32_t >( out, vec.x );
+        write< std::int32_t >( out, vec.y );
     }
 
     template<>
     void write< std::string >( std::ostream& out, const std::string& str )
     {
-        write< int32 >( out, str.length() );
+        write< std::int32_t >( out, str.length() );
         out.write( &str[ 0 ], str.length() );
     }
 
@@ -55,18 +56,18 @@ namespace tbin
     {
         Properties ret;
 
-        int count = read< int32 >( in );
+        int count = read< std::int32_t >( in );
         for ( int i = 0; i < count; ++i )
         {
             std::string key;
             PropertyValue value;
 
             key = read< std::string >( in );
-            value.type = static_cast< PropertyValue::Type >( read< uint8 >( in ) );
+            value.type = static_cast< PropertyValue::Type >( read< std::uint8_t >( in ) );
             switch ( value.type )
             {
-                case PropertyValue::Bool:    value.data.b  = read< uint8   >( in ) > 0; break;
-                case PropertyValue::Integer: value.data.i  = read< int32   >( in );     break;
+                case PropertyValue::Bool:    value.data.b  = read< std::uint8_t   >( in ) > 0; break;
+                case PropertyValue::Integer: value.data.i  = read< std::int32_t   >( in );     break;
                 case PropertyValue::Float:   value.data.f  = read< float       >( in );     break;
                 case PropertyValue::String:  value.dataStr = read< std::string >( in );     break;
                 default: throw std::invalid_argument("Bad property type");
@@ -81,14 +82,14 @@ namespace tbin
 
     void writeProperties( std::ostream& out, const Properties& props )
     {
-        write< int32 >( out, props.size() );
+        write< std::int32_t >( out, props.size() );
         for ( const auto& prop : props )
         {
             write( out, prop.first );
-            write< uint8 >( out, prop.second.type );
+            write< std::uint8_t >( out, prop.second.type );
             switch ( prop.second.type )
             {
-                case PropertyValue::Bool: write< uint8 >( out, prop.second.data.b ? 1 : 0 ); break;
+                case PropertyValue::Bool: write< std::uint8_t >( out, prop.second.data.b ? 1 : 0 ); break;
                 case PropertyValue::Integer: write( out, prop.second.data.i ); break;
                 case PropertyValue::Float: write( out, prop.second.data.f ); break;
                 case PropertyValue::String: write( out, prop.second.dataStr ); break;
@@ -127,8 +128,8 @@ namespace tbin
     {
         Tile ret;
         ret.tilesheet = currTilesheet;
-        ret.staticData.tileIndex = read< int32 >( in );
-        ret.staticData.blendMode = read< uint8 >( in );
+        ret.staticData.tileIndex = read< std::int32_t >( in );
+        ret.staticData.blendMode = read< std::uint8_t >( in );
         ret.props = readProperties( in );
         return ret;
     }
@@ -143,9 +144,9 @@ namespace tbin
     Tile readAnimatedTile( std::istream& in )
     {
         Tile ret;
-        ret.animatedData.frameInterval = read< int32 >( in );
+        ret.animatedData.frameInterval = read< std::int32_t >( in );
 
-        int frameCount = read< int32 >( in );
+        int frameCount = read< std::int32_t >( in );
         ret.animatedData.frames.reserve( frameCount );
         std::string currTilesheet;
         for ( int i = 0; i < frameCount; )
@@ -173,19 +174,19 @@ namespace tbin
     void writeAnimatedTile( std::ostream& out, const Tile& tile )
     {
         write( out, tile.animatedData.frameInterval );
-        write< int32 >( out, tile.animatedData.frames.size() );
+        write< std::int32_t >( out, tile.animatedData.frames.size() );
 
         std::string currTilesheet;
         for ( const Tile& tile : tile.animatedData.frames )
         {
             if ( tile.tilesheet != currTilesheet )
             {
-                write< uint8 >( out, 'T' );
+                write< std::uint8_t >( out, 'T' );
                 write( out, tile.tilesheet );
                 currTilesheet = tile.tilesheet;
             }
 
-            write< uint8 >( out, 'S' );
+            write< std::uint8_t >( out, 'S' );
             writeStaticTile( out, tile );
         }
 
@@ -196,7 +197,7 @@ namespace tbin
     {
         Layer ret;
         ret.id = read< std::string >( in );
-        ret.visible = read< uint8 >( in ) > 0;
+        ret.visible = read< std::uint8_t >( in ) > 0;
         ret.desc = read< std::string >( in );
         ret.layerSize = read< Vector2 >( in );
         ret.tileSize = read< Vector2 >( in );
@@ -211,11 +212,11 @@ namespace tbin
             int ix = 0;
             while ( ix < ret.layerSize.x )
             {
-                uint8 c = read< sf::Uint8 >( in );
+                std::uint8_t c = read< std::uint8_t >( in );
                 switch ( c )
                 {
                     case 'N':
-                        ix += read< int32 >( in );
+                        ix += read< std::int32_t >( in );
                         break;
                     case 'S':
                         ret.tiles[ ix + iy * ret.layerSize.x ] = readStaticTile( in, currTilesheet );
@@ -240,7 +241,7 @@ namespace tbin
     void writeLayer( std::ostream& out, const Layer& layer )
     {
         write( out, layer.id );
-        write< uint8 >( out, layer.visible ? 1 : 0 );
+        write< std::uint8_t >( out, layer.visible ? 1 : 0 );
         write( out, layer.desc );
         write( out, layer.layerSize );
         write( out, layer.tileSize );
@@ -249,7 +250,7 @@ namespace tbin
         std::string currTilesheet = "";
         for ( int iy = 0; iy < layer.layerSize.y; ++iy )
         {
-            int32 nulls = 0;
+            std::int32_t nulls = 0;
             for ( int ix = 0; ix < layer.layerSize.x; ++ix )
             {
                 const Tile& tile = layer.tiles[ ix + iy * layer.layerSize.x ];
@@ -262,33 +263,33 @@ namespace tbin
 
                 if ( nulls > 0 )
                 {
-                    write< uint8 >( out, 'N' );
+                    write< std::uint8_t >( out, 'N' );
                     write( out, nulls );
                     nulls = 0;
                 }
 
                 if ( tile.tilesheet != currTilesheet )
                 {
-                    write< uint8 >( out, 'T' );
+                    write< std::uint8_t >( out, 'T' );
                     write( out, tile.tilesheet );
                     currTilesheet = tile.tilesheet;
                 }
 
                 if ( tile.animatedData.frames.size() == 0 )
                 {
-                    write< uint8 >( out, 'S' );
+                    write< std::uint8_t >( out, 'S' );
                     writeStaticTile( out, tile );
                 }
                 else
                 {
-                    write< uint8 >( out, 'A' );
+                    write< std::uint8_t >( out, 'A' );
                     writeAnimatedTile( out, tile );
                 }
             }
 
             if ( nulls > 0 )
             {
-                write< uint8 >( out, 'N' );
+                write< std::uint8_t >( out, 'N' );
                 write( out, nulls );
             }
         }
@@ -328,14 +329,14 @@ namespace tbin
             Properties props = readProperties( in );
 
             std::vector< TileSheet > tilesheets;
-            int tilesheetCount = read< int32 >( in );
+            int tilesheetCount = read< std::int32_t >( in );
             for ( int i = 0; i < tilesheetCount; ++i )
             {
                 tilesheets.push_back( readTilesheet( in ) );
             }
 
             std::vector< Layer > layers;
-            int layerCount = read< int32 >( in );
+            int layerCount = read< std::int32_t >( in );
             for ( int i = 0; i < layerCount; ++i )
             {
                 layers.push_back( readLayer( in ) );
@@ -380,11 +381,11 @@ namespace tbin
             write( out, desc );
             writeProperties( out, props );
 
-            write< int32 >( out, tilesheets.size() );
+            write< std::int32_t >( out, tilesheets.size() );
             for ( const TileSheet& ts : tilesheets )
                 writeTilesheet( out, ts );
 
-            write< int32 >( out, layers.size() );
+            write< std::int32_t >( out, layers.size() );
             for ( const Layer& layer : layers )
                 writeLayer( out, layer );
 

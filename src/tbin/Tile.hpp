@@ -2,6 +2,7 @@
 #define TBIN_TILE_HPP
 
 #include <vector>
+#include <cstdint>
 
 #include "tbin/PropertyValue.hpp"
 
@@ -21,13 +22,13 @@ namespace tbin
             
             struct
             {
-                sf::Int32 tileIndex;
-                sf::Uint8 blendMode;
+                std::int32_t tileIndex;
+                std::uint8_t blendMode;
             } staticData;
             
             struct
             {
-                sf::Int32 frameInterval;
+                std::int32_t frameInterval;
                 std::vector< Tile > frames;
             } animatedData;
             

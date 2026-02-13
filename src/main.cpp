@@ -1,6 +1,7 @@
 #include "tbin/Map.hpp"
 
 #include <iostream>
+#include <emscripten/emscripten.h>
 
 int main(int argv, char** argc)
 {
@@ -42,4 +43,40 @@ int main(int argv, char** argc)
         return 3;
 
     return 0;
+}
+
+extern "C" {
+
+    EMSCRIPTEN_KEEPALIVE
+    tbin::Map* map_create() {
+        return new tbin::Map();
+    }
+
+    EMSCRIPTEN_KEEPALIVE
+    void map_destroy(tbin::Map* m) {
+        delete m;
+    }
+
+    EMSCRIPTEN_KEEPALIVE
+    int map_load_file(tbin::Map* m, const char* vfsPath) {
+        return (m && m->loadFromFile(vfsPath)) ? 1 : 0;
+    }
+
+    // Example getters (you implement what you need)
+    EMSCRIPTEN_KEEPALIVE
+    void map_log_props(const tbin::Map* m) {
+        if (!m) return;
+
+        for (auto const& [key, val] : m->props) {
+            printf("%s -> %s\n", key.c_str(), val.dataStr.c_str());
+        }
+        return;
+    }
+
+    EMSCRIPTEN_KEEPALIVE
+    const char* map_get_id(const tbin::Map* m) {
+        if (!m) { return ""; };
+        return m->id.c_str();
+    }
+
 }

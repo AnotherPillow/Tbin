@@ -1,0 +1,27 @@
+<script type="module">
+import TBIN from "./build/tbin.js";
+
+const mod = await TBIN();
+
+const res = await fetch("./map.tbin");
+const bytes = new Uint8Array(await res.arrayBuffer());
+
+if (!mod.FS.analyzePath("/data").exists) {
+    mod.FS.mkdir("/data");
+}
+mod.FS.writeFile("/data/map.tbin", bytes);
+
+const mapPtr = mod.ccall("map_create", "number", [], []);
+
+const ok = mod.ccall(
+    "map_load_file",
+    "number",
+    ["number", "string"],
+    [mapPtr, "/data/map.tbin"]
+);
+console.log("loaded?", !!ok);
+
+mod.ccall("map_log_props", null, ["number"], [mapPtr]);
+
+mod.ccall("map_destroy", null, ["number"], [mapPtr]);
+</script>

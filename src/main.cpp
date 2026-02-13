@@ -5,7 +5,7 @@
 int main(int argv, char** argc)
 {
     if (3 > argv) {
-        printf("please run with [executable] input.tbin output.tbin");
+        printf("please run with [executable] input.tbin output.tbin\n");
         return 1;
     }
 

@@ -289,4 +289,58 @@ extern "C" {
         return m->layers.at(index).tileSize.y;
     }
 
+    EMSCRIPTEN_KEEPALIVE
+    int map_layer_prop_count(const tbin::Map* m, int index) {
+        if (!m) return 0;
+
+        return m->layers.at(index).props.size();
+    }
+
+    EMSCRIPTEN_KEEPALIVE
+    char** map_layer_prop_keys_list(const tbin::Map* m, int* outCount, int index) {
+        if (!outCount) return nullptr;
+        *outCount = 0;
+        if (!m) return nullptr;
+
+        tbin::Layer layer = m->layers.at(index);
+
+        const int n = (int)layer.props.size();
+        *outCount = n;
+
+        // Allocate the array of pointers
+        char** list = (char**)std::malloc(sizeof(char*) * n);
+        int idx = 0;
+
+        for (auto const& [k, v] : layer.props) {
+            // Allocate and copy each key string
+            const size_t len = k.size();
+            char* s = (char*)std::malloc(len + 1);
+            std::memcpy(s, k.c_str(), len + 1);
+            list[idx++] = s;
+        }
+
+        return list;
+    }
+    
+    EMSCRIPTEN_KEEPALIVE
+    const char* map_layer_prop_get_value(const tbin::Map* m, const char* key, int index) {
+        printf("layer getting value for %s\n", key);
+        if (!m) {
+            printf("layer m is null getting prop value for %s", key);
+            return "";
+        }
+        tbin::Layer layer = m->layers.at(index);
+        
+        auto it = m->props.find(key);
+        if (it == m->props.end()) {
+            printf("layer couldnt find %s in properties\n", key);
+            return nullptr;
+        }
+
+        const tbin::PropertyValue* pv = &it->second;   // assigned to a variable
+        const char* val = pv->dataStr.c_str();
+        printf("layer [c] key %s equals value %s\n", key, val);
+        return val;
+    }
+
 }

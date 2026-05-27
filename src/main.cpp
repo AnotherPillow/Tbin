@@ -349,7 +349,7 @@ extern "C" {
         // commented to help perf
         // printf("layer getting tile index for %d @ %d\n", layerIndex, tileIndex);
         if (!m) {
-            // printf("layer m is null getting tile index for %d @ %d", layerIndex, tileIndex);
+            // printf("layer m is null getting tile index for %d @ %d\n", layerIndex, tileIndex);
             return -1;
         }
         tbin::Layer layer = m->layers.at(layerIndex);
@@ -369,13 +369,14 @@ extern "C" {
         // commented to help perf
         // printf("layer getting tilesheet for %d @ %d\n", layerIndex, tileIndex);
         if (!m) {
-            // printf("layer m is null getting tilesheet for %d @ %d", layerIndex, tileIndex);
-            return "_m";
+            // printf("layer m is null getting tilesheet for %d @ %d\n", layerIndex, tileIndex);
+            return "";
         }
 
         const tbin::Tile& tile = m->layers.at(layerIndex).tiles.at(tileIndex);
+        // printf("there's %zu tiles on the layer, and %d was requested\n", m->layers.at(layerIndex).tiles.size(), tileIndex);
 
-        if (tile.isNullTile()) return "_n";
+        if (tile.isNullTile()) return "";
 
         return tile.tilesheet.c_str();
     }
@@ -385,7 +386,7 @@ extern "C" {
         // commented to help perf
         // printf("layer getting blend mode for %d @ %d\n", layerIndex, tileIndex);
         if (!m) {
-            // printf("layer m is null getting blend mode for %d @ %d", layerIndex, tileIndex);
+            // printf("layer m is null getting blend mode for %d @ %d\n", layerIndex, tileIndex);
             return 0; // i dont know what i should default it to
         }
         tbin::Layer layer = m->layers.at(layerIndex);

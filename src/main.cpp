@@ -378,10 +378,6 @@ extern "C" {
 
         if (tile.isNullTile()) return "";
 
-        // if its animated just return the first frame's
-        if (tile.animatedData.frames.size() > 0) {
-            return tile.animatedData.frames.at(0).tilesheet.c_str();
-        }
         return tile.tilesheet.c_str();
     }
 

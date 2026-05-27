@@ -200,8 +200,8 @@ extern "C" {
         }
         tbin::TileSheet sheet = m->tilesheets.at(index);
         
-        auto it = m->props.find(key);
-        if (it == m->props.end()) {
+        auto it = sheet.props.find(key);
+        if (it == sheet.props.end()) {
             printf("tilesheet couldnt find %s in properties\n", key);
             return nullptr;
         }
@@ -331,8 +331,8 @@ extern "C" {
         }
         tbin::Layer layer = m->layers.at(index);
         
-        auto it = m->props.find(key);
-        if (it == m->props.end()) {
+        auto it = layer.props.find(key);
+        if (it == layer.props.end()) {
             printf("layer couldnt find %s in properties\n", key);
             return nullptr;
         }

@@ -340,7 +340,62 @@ extern "C" {
         const tbin::PropertyValue* pv = &it->second;   // assigned to a variable
         const char* val = pv->dataStr.c_str();
         printf("layer [c] key %s equals value %s\n", key, val);
+
         return val;
+    }
+
+    EMSCRIPTEN_KEEPALIVE
+    int map_layer_tile_get_index(const tbin::Map* m, int layerIndex, int tileIndex) {
+        printf("layer getting tile index for %d @ %d\n", layerIndex, tileIndex);
+        if (!m) {
+            printf("layer m is null getting tile index for %d @ %d", layerIndex, tileIndex);
+            return -1;
+        }
+        tbin::Layer layer = m->layers.at(layerIndex);
+        tbin::Tile tile = layer.tiles.at(tileIndex);
+
+        if (tile.isNullTile()) return -1;
+
+        if (tile.animatedData.frames.size() > 0) { 
+            // is animated
+            return tile.animatedData.frames.at(0).staticData.tileIndex;
+        } else {
+            return tile.staticData.tileIndex;
+        }
+    }
+    EMSCRIPTEN_KEEPALIVE
+    const char* map_layer_tile_get_tilesheet(const tbin::Map* m, int layerIndex, int tileIndex) {
+        printf("layer getting tilesheet for %d @ %d\n", layerIndex, tileIndex);
+        if (!m) {
+            printf("layer m is null getting tilesheet for %d @ %d", layerIndex, tileIndex);
+            return "";
+        }
+
+        const tbin::Tile& tile = m->layers.at(layerIndex).tiles.at(tileIndex);
+
+        if (tile.isNullTile()) return "";
+
+        return tile.tilesheet.c_str();
+    }
+
+    EMSCRIPTEN_KEEPALIVE
+    int map_layer_tile_get_blend_mode(const tbin::Map* m, int layerIndex, int tileIndex) {
+        printf("layer getting blend mode for %d @ %d\n", layerIndex, tileIndex);
+        if (!m) {
+            printf("layer m is null getting blend mode for %d @ %d", layerIndex, tileIndex);
+            return 0; // i dont know what i should default it to
+        }
+        tbin::Layer layer = m->layers.at(layerIndex);
+        tbin::Tile tile = layer.tiles.at(tileIndex);
+
+        if (tile.isNullTile()) return 0; // i dont know what i should default it to
+
+        if (tile.animatedData.frames.size() > 0) { 
+            // is animated
+            return tile.animatedData.frames.at(0).staticData.blendMode;
+        } else {
+            return tile.staticData.blendMode;
+        }
     }
 
 }

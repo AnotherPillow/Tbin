@@ -346,9 +346,10 @@ extern "C" {
 
     EMSCRIPTEN_KEEPALIVE
     int map_layer_tile_get_index(const tbin::Map* m, int layerIndex, int tileIndex) {
-        printf("layer getting tile index for %d @ %d\n", layerIndex, tileIndex);
+        // commented to help perf
+        // printf("layer getting tile index for %d @ %d\n", layerIndex, tileIndex);
         if (!m) {
-            printf("layer m is null getting tile index for %d @ %d", layerIndex, tileIndex);
+            // printf("layer m is null getting tile index for %d @ %d", layerIndex, tileIndex);
             return -1;
         }
         tbin::Layer layer = m->layers.at(layerIndex);
@@ -365,9 +366,10 @@ extern "C" {
     }
     EMSCRIPTEN_KEEPALIVE
     const char* map_layer_tile_get_tilesheet(const tbin::Map* m, int layerIndex, int tileIndex) {
-        printf("layer getting tilesheet for %d @ %d\n", layerIndex, tileIndex);
+        // commented to help perf
+        // printf("layer getting tilesheet for %d @ %d\n", layerIndex, tileIndex);
         if (!m) {
-            printf("layer m is null getting tilesheet for %d @ %d", layerIndex, tileIndex);
+            // printf("layer m is null getting tilesheet for %d @ %d", layerIndex, tileIndex);
             return "";
         }
 
@@ -380,9 +382,10 @@ extern "C" {
 
     EMSCRIPTEN_KEEPALIVE
     int map_layer_tile_get_blend_mode(const tbin::Map* m, int layerIndex, int tileIndex) {
-        printf("layer getting blend mode for %d @ %d\n", layerIndex, tileIndex);
+        // commented to help perf
+        // printf("layer getting blend mode for %d @ %d\n", layerIndex, tileIndex);
         if (!m) {
-            printf("layer m is null getting blend mode for %d @ %d", layerIndex, tileIndex);
+            // printf("layer m is null getting blend mode for %d @ %d", layerIndex, tileIndex);
             return 0; // i dont know what i should default it to
         }
         tbin::Layer layer = m->layers.at(layerIndex);

@@ -227,14 +227,14 @@ extern "C" {
     }
     
     EMSCRIPTEN_KEEPALIVE
-    int map_tilesheets_image_px_x(const tbin::Map* m, int index) {
+    int map_tilesheets_image_tiles_x(const tbin::Map* m, int index) {
         if (!m) return 0;
 
         return m->tilesheets.at(index).sheetSize.x;
     }
     
     EMSCRIPTEN_KEEPALIVE
-    int map_tilesheets_image_px_y(const tbin::Map* m, int index) {
+    int map_tilesheets_image_tiles_y(const tbin::Map* m, int index) {
         if (!m) return 0;
 
         return m->tilesheets.at(index).sheetSize.y;

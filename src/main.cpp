@@ -370,12 +370,12 @@ extern "C" {
         // printf("layer getting tilesheet for %d @ %d\n", layerIndex, tileIndex);
         if (!m) {
             // printf("layer m is null getting tilesheet for %d @ %d", layerIndex, tileIndex);
-            return "";
+            return "_m";
         }
 
         const tbin::Tile& tile = m->layers.at(layerIndex).tiles.at(tileIndex);
 
-        if (tile.isNullTile()) return "";
+        if (tile.isNullTile()) return "_n";
 
         return tile.tilesheet.c_str();
     }

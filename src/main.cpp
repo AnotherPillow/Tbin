@@ -406,4 +406,45 @@ extern "C" {
         }
     }
 
+    EMSCRIPTEN_KEEPALIVE
+    int map_layer_tile_prop_count(const tbin::Map* m, int layerIndex, int tileIndex) {
+        if (!m) return 0;
+
+        return m->layers.at(layerIndex).tiles.at(tileIndex).props.size();
+    }
+
+    EMSCRIPTEN_KEEPALIVE
+    char** map_layer_tile_prop_keys_list(const tbin::Map* m, int* outCount, int layerIndex, int tileIndex) {
+        if (!outCount) return nullptr;
+        *outCount = 0;
+        if (!m) return nullptr;
+
+        const tbin::Tile& tile = m->layers.at(layerIndex).tiles.at(tileIndex);
+
+        const int n = (int)tile.props.size();
+        *outCount = n;
+
+        char** list = (char**)std::malloc(sizeof(char*) * n);
+        int idx = 0;
+
+        for (auto const& [k, v] : tile.props) {
+            const size_t len = k.size();
+            char* s = (char*)std::malloc(len + 1);
+            std::memcpy(s, k.c_str(), len + 1);
+            list[idx++] = s;
+        }
+
+        return list;
+    }
+
+    EMSCRIPTEN_KEEPALIVE
+    const char* map_layer_tile_prop_get_value(const tbin::Map* m, const char* key, int layerIndex, int tileIndex) {
+        if (!m) return "";
+
+        const tbin::Tile& tile = m->layers.at(layerIndex).tiles.at(tileIndex);
+        auto it = tile.props.find(key);
+        if (it == tile.props.end()) return nullptr;
+
+        return it->second.dataStr.c_str();
+    }
 }

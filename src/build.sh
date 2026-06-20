@@ -1,3 +1,5 @@
+mkdir -p build # make build if it doesnt exist
+
 emcc -I. main.cpp tbin/Map.cpp \
     -O3 \
     -o build/tbin.js \
